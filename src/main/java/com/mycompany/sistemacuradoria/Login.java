@@ -133,17 +133,16 @@ public class Login extends javax.swing.JFrame {
         else if(userLogado != null && userLogado.getTipo().equals("Administrador")){
             JOptionPane.showMessageDialog(this, "Bem-vindo administrador " + userLogado.getNome() + "!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
+            TabelaUsersAdmin telaAdmin = new TabelaUsersAdmin();
+            telaAdmin.setVisible(true);
             this.dispose();
         }
         else{
-            JOptionPane.showMessageDialog(this, "E-mail/senha incorretos.", "Erro ao realizar login.", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Email/senha incorretos.", "Erro ao realizar login.", JOptionPane.ERROR_MESSAGE);
 
             // Limpar o campo de senha
             loginPasswordField.setText("");
         }
-            
-        
-        
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void cadastre_seButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastre_seButtonActionPerformed

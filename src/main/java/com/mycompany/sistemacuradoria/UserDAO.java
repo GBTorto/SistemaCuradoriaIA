@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -45,5 +47,33 @@ public class UserDAO {
             System.err.println("Erro durante login: " + e.getMessage());
         }
         return user;
+    }
+    
+    public List<User> listaUsers(){
+        List<User> users = new ArrayList<>();
+        
+        String sql = "select id_user, nome, idade, tipo, email from tb_user";
+        
+        ConnectionFactory factory = new ConnectionFactory();
+        
+        try(Connection c = factory.obtemConexao();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()){
+            
+            while(rs.next()){
+                User u = new User();
+                u.setId_user(rs.getInt("id_user"));
+                u.setNome(rs.getString("nome"));
+                u.setIdade(rs.getInt("idade"));
+                u.setTipo(rs.getString("tipo"));
+                u.setEmail(rs.getString("email"));
+                
+                users.add(u);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        
+        return users;
     }
 }
