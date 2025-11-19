@@ -9,9 +9,10 @@ public class SistemaCuradoria {
         SwingUtilities.invokeLater(new Runnable(){
             @Override
             public void run(){
-                Cadastro telaCadastro = new Cadastro();
-                telaCadastro.setVisible(true);
-                telaCadastro.setLocationRelativeTo(null);
+                
+                Login telaLogin = new Login();
+                telaLogin.setVisible(true);
+                telaLogin.setLocationRelativeTo(null);
                 
             }
         });
