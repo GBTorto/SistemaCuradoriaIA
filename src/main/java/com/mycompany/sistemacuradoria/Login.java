@@ -125,9 +125,14 @@ public class Login extends javax.swing.JFrame {
         userLogado = dao.login(email, senha);
 
 
-        if(userLogado != null){
+        if(userLogado != null && userLogado.getTipo().equals("Comum")){
             JOptionPane.showMessageDialog(this, "Bem-vindo " + userLogado.getNome() + "!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
+            this.dispose();
+        }
+        else if(userLogado != null && userLogado.getTipo().equals("Administrador")){
+            JOptionPane.showMessageDialog(this, "Bem-vindo administrador " + userLogado.getNome() + "!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            
             this.dispose();
         }
         else{
