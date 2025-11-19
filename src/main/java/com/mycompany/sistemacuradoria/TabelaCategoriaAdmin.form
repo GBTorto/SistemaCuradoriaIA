@@ -24,16 +24,14 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="101" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="101" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="sairButton" min="-2" pref="118" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                      <Component id="addCategoriaButton1" min="-2" pref="118" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                      <Component id="addCategoriaButton" min="-2" pref="118" max="-2" attributes="0"/>
+                      <Component id="usuarioAdminButton" min="-2" pref="118" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="cadastrarCategoriaButton" min="-2" pref="118" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane1" min="-2" pref="452" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
           </Group>
@@ -43,14 +41,13 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" min="-2" pref="275" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="addCategoriaButton" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                  <Component id="sairButton" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                  <Component id="addCategoriaButton1" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="cadastrarCategoriaButton" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="usuarioAdminButton" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="59" max="32767" attributes="0"/>
+              <EmptySpace pref="67" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -77,25 +74,20 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="addCategoriaButton">
+    <Component class="javax.swing.JButton" name="cadastrarCategoriaButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Categoria"/>
+        <Property name="text" type="java.lang.String" value="Add Categoria"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addCategoriaButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cadastrarCategoriaButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="sairButton">
+    <Component class="javax.swing.JButton" name="usuarioAdminButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Sair"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="addCategoriaButton1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Add Usuario"/>
+        <Property name="text" type="java.lang.String" value="Usuarios"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addCategoriaButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="usuarioAdminButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

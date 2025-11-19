@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.sistemacuradoria;
 
 import java.util.List;
 
-/**
- *
- * @author Pichau
- */
 public class TabelaUsersAdmin extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TabelaUsersAdmin.class.getName());
@@ -91,6 +83,9 @@ public class TabelaUsersAdmin extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        addCategoriaButton = new javax.swing.JButton();
+        sairButton = new javax.swing.JButton();
+        addCategoriaButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,13 +102,36 @@ public class TabelaUsersAdmin extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        addCategoriaButton.setText("Categoria");
+        addCategoriaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addCategoriaButtonActionPerformed(evt);
+            }
+        });
+
+        sairButton.setText("Sair");
+
+        addCategoriaButton1.setText("Add Usuario");
+        addCategoriaButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addCategoriaButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(101, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(sairButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)
+                        .addComponent(addCategoriaButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)
+                        .addComponent(addCategoriaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(100, 100, 100))
         );
         layout.setVerticalGroup(
@@ -121,11 +139,29 @@ public class TabelaUsersAdmin extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(67, 67, 67)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addCategoriaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sairButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addCategoriaButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addCategoriaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCategoriaButtonActionPerformed
+        // TODO add your handling code here:
+        
+        TabelaCategoriaAdmin telaCategoria = new TabelaCategoriaAdmin();
+        telaCategoria.setVisible(true);
+        telaCategoria.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_addCategoriaButtonActionPerformed
+
+    private void addCategoriaButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCategoriaButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addCategoriaButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,7 +189,10 @@ public class TabelaUsersAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addCategoriaButton;
+    private javax.swing.JButton addCategoriaButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton sairButton;
     // End of variables declaration//GEN-END:variables
 }

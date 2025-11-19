@@ -1,7 +1,6 @@
 package com.mycompany.sistemacuradoria;
 
 import com.mycompany.sistemacuradoria.CategoriaDAO;
-import com.mycompany.sistemacuradoria.model.Categoria;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;

@@ -1,6 +1,5 @@
 package com.mycompany.sistemacuradoria; // Ajuste o pacote conforme sua estrutura
 
-import com.mycompany.sistemacuradoria.model.Categoria; // Assumindo que Categoria está no pacote 'model'
 
 
 // CORREÇÃO 1: Usar a interface List do pacote java.util

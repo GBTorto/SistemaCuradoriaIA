@@ -1,4 +1,4 @@
-package com.mycompany.sistemacuradoria.model;
+package com.mycompany.sistemacuradoria;
 
 public class Categoria {
     
