@@ -13,7 +13,7 @@ import java.util.List;
 public class TabelaUsersAdmin extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TabelaUsersAdmin.class.getName());
-
+    
     /**
      * Creates new form TabelaUsersAdmin
      */
@@ -44,7 +44,7 @@ public class TabelaUsersAdmin extends javax.swing.JFrame {
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt){
-                if(evt.getClickCount() == 1){
+                if(evt.getClickCount() == 2){
                     abrirDetalhesUser();
                 }
             }
@@ -68,6 +68,11 @@ public class TabelaUsersAdmin extends javax.swing.JFrame {
             // Substitua 'TelaDetalhesUsuario' pelo nome da sua tela de edição
             // TelaDetalhesUsuario telaDetalhes = new TelaDetalhesUsuario(usuario, this);
             // telaDetalhes.setVisible(true);
+            
+            EditarUserAdmin editarUser = new EditarUserAdmin(user);
+            editarUser.setVisible(true);
+            editarUser.setLocationRelativeTo(null);
+            this.dispose();
 
             System.out.println("Usuário selecionado para edição: " + user.getNome()); // Linha de teste
         }

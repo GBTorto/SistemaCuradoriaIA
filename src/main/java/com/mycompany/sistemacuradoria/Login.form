@@ -33,7 +33,7 @@
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="loginPasswordField" min="-2" pref="329" max="-2" attributes="0"/>
-                      <Component id="loginTextField" min="-2" pref="329" max="-2" attributes="0"/>
+                      <Component id="loginTextField" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="162" max="32767" attributes="0"/>
