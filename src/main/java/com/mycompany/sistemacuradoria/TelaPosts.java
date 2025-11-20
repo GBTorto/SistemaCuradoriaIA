@@ -1,6 +1,7 @@
 package com.mycompany.sistemacuradoria;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
@@ -9,6 +10,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class TelaPosts extends javax.swing.JFrame {
@@ -27,44 +29,56 @@ public class TelaPosts extends javax.swing.JFrame {
         carregarPosts(this.idUser);
     }
     
-    private JPanel criarCard(String titulo, String autor, String conteudo, int idCategoria, int idUser, String nomeUser, String nomeCategoria){
+    private JPanel criarCard(String titulo, String autor, String conteudo, int idCategoria, int idUser, String nomeUser, String nomeCategoria) {
         JPanel card = new JPanel();
-        
+
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-        card.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        card.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         card.setBackground(Color.WHITE);
-        card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
-        
+        card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 230));
+
         JLabel lblTitulo = new JLabel(titulo);
         lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        
-        JLabel lblAutor = new JLabel("por " + autor);
+        lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel lblAutor = new JLabel("créditos: " + autor);
         lblAutor.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+        lblAutor.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JTextArea txtConteudo = new JTextArea(conteudo);
         txtConteudo.setLineWrap(true);
         txtConteudo.setWrapStyleWord(true);
         txtConteudo.setEditable(false);
-        
+        txtConteudo.setBackground(new Color(245, 245, 245));
+
+        JScrollPane scroll = new JScrollPane(txtConteudo);
+        scroll.setBorder(null);
+        scroll.setMaximumSize(new Dimension(500, 80));
+        scroll.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         JLabel lblUser = new JLabel("Publicado por: " + nomeUser);
         lblUser.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblUser.setForeground(Color.DARK_GRAY);
+        lblUser.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel lblCategoria = new JLabel("Categoria: " + nomeCategoria);
         lblCategoria.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblCategoria.setForeground(Color.GRAY);
-        
+        lblCategoria.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Adicionando ao card
         card.add(lblTitulo);
         card.add(lblAutor);
-        card.add(txtConteudo);
-        card.add(Box.createRigidArea(new Dimension(0, 5)));
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(scroll);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
         card.add(lblUser);
         card.add(lblCategoria);
-        
-        card.add(Box.createRigidArea(new Dimension(0, 10)));
-        
+        card.add(Box.createRigidArea(new Dimension(0, 12)));
+
         return card;
     }
+
 
     private void carregarPosts(int idUser){
         PostDAO dao = new PostDAO();
