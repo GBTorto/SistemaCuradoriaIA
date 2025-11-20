@@ -11,20 +11,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-public class TelaPosts extends javax.swing.JFrame {
+public class TelaPostsGeral extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaPosts.class.getName());
-    
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaPostsGeral.class.getName());
+
     private int idUser;
     
     /**
-     * Creates new form TelaPosts
+     * Creates new form TelaPostsGeral
      */
-    public TelaPosts(int idUser) {
+    public TelaPostsGeral(int idUser) {
         this.idUser = idUser;
-        
         initComponents();
-        carregarPosts(this.idUser);
+        carregarPosts(idUser);
     }
     
     private JPanel criarCard(String titulo, String autor, String conteudo, int idCategoria, int idUser, String nomeUser, String nomeCategoria){
@@ -65,11 +64,11 @@ public class TelaPosts extends javax.swing.JFrame {
         
         return card;
     }
-
+    
     private void carregarPosts(int idUser){
         PostDAO dao = new PostDAO();
         
-        List<Post> posts = dao.listarPost(idUser);
+        List<Post> posts = dao.listarTodosPosts();
         
         jPanel.removeAll();
         
@@ -91,7 +90,7 @@ public class TelaPosts extends javax.swing.JFrame {
         jPanel.revalidate();
         jPanel.repaint();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -103,33 +102,33 @@ public class TelaPosts extends javax.swing.JFrame {
 
         jScrollPane = new javax.swing.JScrollPane();
         jPanel = new javax.swing.JPanel();
-        criarPostButton = new javax.swing.JButton();
-        sairPostButton = new javax.swing.JButton();
-        todosPostButton = new javax.swing.JButton();
+        criarButton = new javax.swing.JButton();
+        interessesPostButton = new javax.swing.JButton();
+        sairButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel.setLayout(new javax.swing.BoxLayout(jPanel, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane.setViewportView(jPanel);
 
-        criarPostButton.setText("Criar Post");
-        criarPostButton.addActionListener(new java.awt.event.ActionListener() {
+        criarButton.setText("Criar Post");
+        criarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                criarPostButtonActionPerformed(evt);
+                criarButtonActionPerformed(evt);
             }
         });
 
-        sairPostButton.setText("Sair");
-        sairPostButton.addActionListener(new java.awt.event.ActionListener() {
+        interessesPostButton.setText("Posts Interesses");
+        interessesPostButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sairPostButtonActionPerformed(evt);
+                interessesPostButtonActionPerformed(evt);
             }
         });
 
-        todosPostButton.setText("Todos os posts");
-        todosPostButton.addActionListener(new java.awt.event.ActionListener() {
+        sairButton.setText("Sair");
+        sairButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                todosPostButtonActionPerformed(evt);
+                sairButtonActionPerformed(evt);
             }
         });
 
@@ -138,58 +137,57 @@ public class TelaPosts extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(sairPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(114, 114, 114)
-                .addComponent(todosPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(criarPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 595, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(sairButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(interessesPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(115, 115, 115)
+                .addComponent(criarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(67, 67, 67)
                 .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(criarPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(sairPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(todosPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 67, Short.MAX_VALUE))
+                    .addComponent(criarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(interessesPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sairButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void criarPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criarPostButtonActionPerformed
+    private void criarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criarButtonActionPerformed
         // TODO add your handling code here:
         CriarPost cp = new CriarPost(idUser);
         cp.setVisible(true);
         cp.setLocationRelativeTo(null);
         this.dispose();
-    }//GEN-LAST:event_criarPostButtonActionPerformed
+    }//GEN-LAST:event_criarButtonActionPerformed
 
-    private void sairPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairPostButtonActionPerformed
+    private void interessesPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interessesPostButtonActionPerformed
         // TODO add your handling code here:
-        
+        TelaPosts tp = new TelaPosts(idUser);
+        tp.setVisible(true);
+        tp.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_interessesPostButtonActionPerformed
+
+    private void sairButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairButtonActionPerformed
+        // TODO add your handling code here:
         Login telaLogin = new Login();
         telaLogin.setVisible(true);
         telaLogin.setLocationRelativeTo(null);
         this.dispose();
-    }//GEN-LAST:event_sairPostButtonActionPerformed
-
-    private void todosPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_todosPostButtonActionPerformed
-        // TODO add your handling code here:
-        TelaPostsGeral tpg = new TelaPostsGeral(idUser);
-        tpg.setVisible(true);
-        tpg.setLocationRelativeTo(null);
-        this.dispose();
-    }//GEN-LAST:event_todosPostButtonActionPerformed
+    }//GEN-LAST:event_sairButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -213,14 +211,14 @@ public class TelaPosts extends javax.swing.JFrame {
 //        //</editor-fold>
 //
 //        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(() -> new TelaPosts(idUser).setVisible(true));
+//        java.awt.EventQueue.invokeLater(() -> new TelaPostsGeral().setVisible(true));
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton criarPostButton;
+    private javax.swing.JButton criarButton;
+    private javax.swing.JButton interessesPostButton;
     private javax.swing.JPanel jPanel;
     private javax.swing.JScrollPane jScrollPane;
-    private javax.swing.JButton sairPostButton;
-    private javax.swing.JButton todosPostButton;
+    private javax.swing.JButton sairButton;
     // End of variables declaration//GEN-END:variables
 }
