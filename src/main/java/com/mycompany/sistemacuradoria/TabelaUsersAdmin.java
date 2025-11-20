@@ -161,6 +161,10 @@ public class TabelaUsersAdmin extends javax.swing.JFrame {
 
     private void addCategoriaButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCategoriaButton1ActionPerformed
         // TODO add your handling code here:
+        CadastroPorAdm telaCadastroPorAdm = new CadastroPorAdm();
+        telaCadastroPorAdm.setVisible(true);
+        telaCadastroPorAdm.setLocationRelativeTo(null);
+        this.dispose();
     }//GEN-LAST:event_addCategoriaButton1ActionPerformed
 
     /**

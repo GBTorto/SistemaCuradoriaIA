@@ -135,6 +135,7 @@ public class Login extends javax.swing.JFrame {
             
             TabelaUsersAdmin telaAdmin = new TabelaUsersAdmin();
             telaAdmin.setVisible(true);
+            telaAdmin.setLocationRelativeTo(null);
             this.dispose();
         }
         else{
