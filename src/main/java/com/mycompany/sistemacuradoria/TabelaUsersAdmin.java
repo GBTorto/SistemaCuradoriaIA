@@ -110,6 +110,11 @@ public class TabelaUsersAdmin extends javax.swing.JFrame {
         });
 
         sairButton.setText("Sair");
+        sairButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sairButtonActionPerformed(evt);
+            }
+        });
 
         addCategoriaButton1.setText("Add Usuario");
         addCategoriaButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -166,6 +171,14 @@ public class TabelaUsersAdmin extends javax.swing.JFrame {
         telaCadastroPorAdm.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_addCategoriaButton1ActionPerformed
+
+    private void sairButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairButtonActionPerformed
+        // TODO add your handling code here:
+        Login telaLogin = new Login();
+        telaLogin.setVisible(true);
+        telaLogin.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_sairButtonActionPerformed
 
     /**
      * @param args the command line arguments

@@ -39,6 +39,11 @@ public class AddCategoria extends javax.swing.JFrame {
         });
 
         cancelarButton.setText("Cancelar");
+        cancelarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelarButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -92,6 +97,14 @@ public class AddCategoria extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_criarCategoriaButtonActionPerformed
+
+    private void cancelarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarButtonActionPerformed
+        // TODO add your handling code here:
+        TabelaCategoriaAdmin telaCategoriaAdmin = new TabelaCategoriaAdmin();
+        telaCategoriaAdmin.setVisible(true);
+        telaCategoriaAdmin.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_cancelarButtonActionPerformed
 
     /**
      * @param args the command line arguments
