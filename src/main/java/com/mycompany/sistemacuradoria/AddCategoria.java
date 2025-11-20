@@ -83,9 +83,9 @@ public class AddCategoria extends javax.swing.JFrame {
             
             ps.executeUpdate();
             
-            TabelaUsersAdmin telaTabelaAdmin = new TabelaUsersAdmin();
-            telaTabelaAdmin.setVisible(true);
-            telaTabelaAdmin.setLocationRelativeTo(null);
+            TabelaCategoriaAdmin telaTabelaCategoriaAdmin = new TabelaCategoriaAdmin();
+            telaTabelaCategoriaAdmin.setVisible(true);
+            telaTabelaCategoriaAdmin.setLocationRelativeTo(null);
             this.dispose();
         }
         catch(Exception e){

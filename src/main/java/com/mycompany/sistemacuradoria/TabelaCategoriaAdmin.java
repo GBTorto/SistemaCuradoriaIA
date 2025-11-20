@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.sistemacuradoria;
 
 import java.util.List;
 
-/**
- *
- * @author Pichau
- */
 public class TabelaCategoriaAdmin extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TabelaCategoriaAdmin.class.getName());
@@ -56,6 +48,11 @@ public class TabelaCategoriaAdmin extends javax.swing.JFrame {
             CategoriaTableModel model = (CategoriaTableModel) jTable1.getModel();
             
             Categoria categoria = model.getCategoria(linhaModel);
+            
+            EditarCategoriaAdmin telaEditar = new EditarCategoriaAdmin(categoria);
+            telaEditar.setVisible(true);
+            telaEditar.setLocationRelativeTo(null);
+            this.dispose();
             
         }
     }
@@ -134,10 +131,19 @@ public class TabelaCategoriaAdmin extends javax.swing.JFrame {
 
     private void cadastrarCategoriaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarCategoriaButtonActionPerformed
         // TODO add your handling code here:
+        AddCategoria telaAddCategoria = new AddCategoria();
+        
+        telaAddCategoria.setVisible(true);
+        telaAddCategoria.setLocationRelativeTo(null);
+        this.dispose();
     }//GEN-LAST:event_cadastrarCategoriaButtonActionPerformed
 
     private void usuarioAdminButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioAdminButtonActionPerformed
         // TODO add your handling code here:
+        TabelaUsersAdmin telaUser = new TabelaUsersAdmin();
+        telaUser.setVisible(true);
+        telaUser.setLocationRelativeTo(null);
+        this.dispose();
     }//GEN-LAST:event_usuarioAdminButtonActionPerformed
 
     /**
