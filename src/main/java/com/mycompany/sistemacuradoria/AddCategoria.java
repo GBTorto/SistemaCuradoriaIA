@@ -126,7 +126,7 @@ public class AddCategoria extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new AddCategoria().setVisible(true));
     }

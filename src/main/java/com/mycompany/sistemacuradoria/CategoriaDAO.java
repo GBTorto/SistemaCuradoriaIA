@@ -12,6 +12,32 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CategoriaDAO {
+    
+    public List<Categoria> listarNomesCategorias(){
+        List<Categoria> categorias = new ArrayList<>();
+        
+        String sql = "select id_categoria, categoria from tb_categoria";
+        
+        ConnectionFactory factory = new ConnectionFactory();
+        
+        try(Connection c = factory.obtemConexao();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()){
+            
+            while (rs.next()) {
+                    int idCategoria = rs.getInt("id_categoria");
+                    String categoria = rs.getString("categoria");
+                
+                    categorias.add(new Categoria(idCategoria, categoria));
+                }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+         return categorias;
+    }
+    
     public List<Categoria> buscarTodas() {
         List<Categoria> categorias = new ArrayList<>();
         

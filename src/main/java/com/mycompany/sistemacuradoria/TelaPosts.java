@@ -15,12 +15,16 @@ public class TelaPosts extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaPosts.class.getName());
     
+    private int idUser;
+    
     /**
      * Creates new form TelaPosts
      */
     public TelaPosts(int idUser) {
+        this.idUser = idUser;
+        
         initComponents();
-        carregarPosts(idUser);
+        carregarPosts(this.idUser);
     }
     
     private JPanel criarCard(String titulo, String autor, String conteudo, int idCategoria, int idUser, String nomeUser, String nomeCategoria){
@@ -99,25 +103,74 @@ public class TelaPosts extends javax.swing.JFrame {
 
         jScrollPane = new javax.swing.JScrollPane();
         jPanel = new javax.swing.JPanel();
+        criarPostButton = new javax.swing.JButton();
+        sairPostButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel.setLayout(new javax.swing.BoxLayout(jPanel, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane.setViewportView(jPanel);
 
+        criarPostButton.setText("Criar Post");
+        criarPostButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                criarPostButtonActionPerformed(evt);
+            }
+        });
+
+        sairPostButton.setText("Sair");
+        sairPostButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sairPostButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(159, 159, 159)
+                .addComponent(sairPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(criarPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(159, 159, 159))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 595, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(criarPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sairPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 67, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void criarPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criarPostButtonActionPerformed
+        // TODO add your handling code here:
+        CriarPost cp = new CriarPost(idUser);
+        cp.setVisible(true);
+        cp.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_criarPostButtonActionPerformed
+
+    private void sairPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairPostButtonActionPerformed
+        // TODO add your handling code here:
+        
+        Login telaLogin = new Login();
+        telaLogin.setVisible(true);
+        telaLogin.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_sairPostButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -145,7 +198,9 @@ public class TelaPosts extends javax.swing.JFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton criarPostButton;
     private javax.swing.JPanel jPanel;
     private javax.swing.JScrollPane jScrollPane;
+    private javax.swing.JButton sairPostButton;
     // End of variables declaration//GEN-END:variables
 }
