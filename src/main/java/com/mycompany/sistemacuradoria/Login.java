@@ -127,7 +127,10 @@ public class Login extends javax.swing.JFrame {
 
         if(userLogado != null && userLogado.getTipo().equals("Comum")){
             JOptionPane.showMessageDialog(this, "Bem-vindo " + userLogado.getNome() + "!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-
+            
+            TelaPosts telaPost = new TelaPosts(userLogado.getId_user());
+            telaPost.setVisible(true);
+            telaPost.setLocationRelativeTo(null);
             this.dispose();
         }
         else if(userLogado != null && userLogado.getTipo().equals("Administrador")){
