@@ -10,10 +10,7 @@ public class SistemaCuradoria {
             @Override
             public void run(){
                 
-                Login telaLogin = new Login();
-                telaLogin.setVisible(true);
-                telaLogin.setLocationRelativeTo(null);
-                
+             new MainUI();
             }
         });
     }

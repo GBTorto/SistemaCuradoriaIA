@@ -10,7 +10,8 @@ package com.mycompany.sistemacuradoria;
  */
 public class Post {
     private int idPost;
-    private String titulo;
+    public String titulo;
+    public String texto;
     private String autor;
     private String conteudo;
     private int idCategoria;
@@ -20,9 +21,10 @@ public class Post {
     
     public Post(){};
     
-    public Post(int idPost, String titulo, String autor, String conteudo, int idCategoria, int idUser, String nomeUser, String nomeCategoria){
+    public Post(int idPost, String titulo, String texto, String autor, String conteudo, int idCategoria, int idUser, String nomeUser, String nomeCategoria){
         this.idPost = idPost;
         this.titulo  = titulo;
+        this.texto = texto;
         this.autor = autor;
         this.conteudo = conteudo;
         this.idCategoria = idCategoria;
@@ -38,6 +40,11 @@ public class Post {
     public String getTitulo(){
         return titulo;
     }
+    
+   
+    public void setTexto(String texto){
+    this.texto = texto;
+}
     
     public String getAutor(){
         return autor;
