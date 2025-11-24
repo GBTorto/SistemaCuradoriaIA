@@ -317,7 +317,8 @@ private JPanel buildLogin() {
     p.setOpaque(false); 
     
     JPanel formPanel = new GradientPanel(new Color(255, 255, 255), new Color(240, 240, 240));
-    formPanel.setPreferredSize(new Dimension(550, 650));
+    
+    formPanel.setPreferredSize(new Dimension(450, 500));
     formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
     formPanel.setBorder(BorderFactory.createCompoundBorder(
         BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
@@ -327,19 +328,19 @@ private JPanel buildLogin() {
     JLabel t = titleLabel("📝 Cadastro");
     t.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    JLabel l1 = smallLabel("Email:"); l1.setAlignmentX(Component.LEFT_ALIGNMENT);
+    JLabel l1 = smallLabel("Email:"); l1.setAlignmentX(Component.CENTER_ALIGNMENT);
     JTextField email = field(); email.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
     
-    JLabel l_user = smallLabel("Usuário/Nome:"); l_user.setAlignmentX(Component.LEFT_ALIGNMENT);
+    JLabel l_user = smallLabel("Usuário/Nome:"); l_user.setAlignmentX(Component.CENTER_ALIGNMENT);
     JTextField user = field(); user.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
 
-    JLabel l2 = smallLabel("Senha:"); l2.setAlignmentX(Component.LEFT_ALIGNMENT);
+    JLabel l2 = smallLabel("Senha:"); l2.setAlignmentX(Component.CENTER_ALIGNMENT);
     JPasswordField pass = passField(); pass.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
 
-    JLabel l3 = smallLabel("Confirmar Senha:"); l3.setAlignmentX(Component.LEFT_ALIGNMENT);
+    JLabel l3 = smallLabel("Confirmar Senha:"); l3.setAlignmentX(Component.CENTER_ALIGNMENT);
     JPasswordField pass2 = passField(); pass2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
     
-    JLabel l4 = smallLabel("Idade:"); l4.setAlignmentX(Component.LEFT_ALIGNMENT);
+    JLabel l4 = smallLabel("Idade:"); l4.setAlignmentX(Component.CENTER_ALIGNMENT);
     JTextField idadeField = field(); idadeField.setMaximumSize(new Dimension(100, 35));
     
     JButton cadastrar = bigButton("Cadastrar"); 
@@ -439,10 +440,10 @@ private JPanel buildLogin() {
         JLabel t = titleLabel("✍️ Criar Novo Post");
         t.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel l1 = smallLabel("Título:"); l1.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel l1 = smallLabel("Título:"); l1.setAlignmentX(Component.CENTER_ALIGNMENT);
         JTextField titulo = field(); titulo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
 
-        JLabel l_cat = smallLabel("Categoria:"); l_cat.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel l_cat = smallLabel("Categoria:"); l_cat.setAlignmentX(Component.CENTER_ALIGNMENT);
         JComboBox<Categoria> comboCategoria = new JComboBox<>();
         comboCategoria.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
         
@@ -467,7 +468,7 @@ private JPanel buildLogin() {
         }
         
         
-        JLabel l2 = smallLabel("Conteúdo:"); l2.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel l2 = smallLabel("Conteúdo:"); l2.setAlignmentX(Component.CENTER_ALIGNMENT);
         JTextArea texto = new JTextArea();
         texto.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         texto.setWrapStyleWord(true);
@@ -702,36 +703,14 @@ private JScrollPane buildVerPosts() {
     btLogout.setFocusPainted(false);
     btLogout.setCursor(new Cursor(Cursor.HAND_CURSOR));
     btLogout.setAlignmentX(Component.CENTER_ALIGNMENT);
-    btLogout.setEnabled(currentUser != null);
-    
-  btLogout.addActionListener(e -> {
 
-    if (currentUser == null) {
-        JOptionPane.showMessageDialog(null,
-            "Você não está logado!",
-            "Erro",
-            JOptionPane.WARNING_MESSAGE
-        );
-        return;
-    }
-
-    // limpa sessão
-    currentUser = null;
-
-    // atualiza sidebar e perfil
-    updateSidebarVisibility();
-    updatePerfilInfo();
-
-    // volta para o login
-    cardLayout.show(mainContent, "login");
-    mainContent.revalidate();
-    mainContent.repaint();
-
-
-    JOptionPane.showMessageDialog(null, "Logout realizado com sucesso!");
-});
-
-
+    btLogout.addActionListener(e -> {
+        currentUser = null;
+        updatePerfilInfo();
+        updateSidebarVisibility();
+        cardLayout.show(mainContent, "home");
+        JOptionPane.showMessageDialog(this, "Logout realizado!", "Sessão Encerrada", JOptionPane.INFORMATION_MESSAGE);
+    });
 
     infoPanel.add(btLogout);
 
@@ -763,8 +742,9 @@ private JScrollPane buildVerPosts() {
     }
 
     JTable tabela = new JTable(model);
-    JScrollPane scroll = new JScrollPane(tabela);
+JScrollPane scroll = new JScrollPane(tabela);
 
+    // --- BOTÃO DE ADICIONAR ---
     JButton btAdd = new JButton("Adicionar Usuário");
     btAdd.addActionListener(e -> {
         JTextField nomeField = new JTextField();
@@ -778,31 +758,6 @@ private JScrollPane buildVerPosts() {
                 "Email:", emailField,
                 "Senha:", senhaField
         };
-        
-        JButton btExcluir = new JButton("Excluir Usuário");
-        btExcluir.addActionListener(ev -> {
-        int linha = tabela.getSelectedRow();
-
-        if (linha == -1) {
-        JOptionPane.showMessageDialog(null, "Selecione um usuário para excluir.");
-        return;
-        }
-
-        int id = (int) model.getValueAt(linha, 0);
-
-        int confirm = JOptionPane.showConfirmDialog(
-            null,
-            "Tem certeza que deseja excluir o usuário ID " + id + "?",
-            "Confirmar Exclusão",
-            JOptionPane.YES_NO_OPTION
-        );
-
-        if (confirm == JOptionPane.YES_OPTION) {
-        dao.deletar(id); // CHAMA O DAO
-        model.removeRow(linha); // REMOVE DA TABELA
-        }
-        });
-
 
         int result = JOptionPane.showConfirmDialog(
                 null, form,
@@ -837,14 +792,42 @@ private JScrollPane buildVerPosts() {
         }
     });
 
+    // --- BOTÃO DE EXCLUIR ---
+    JButton btExcluir = new JButton("Excluir Usuário");
+    btExcluir.addActionListener(ev -> {
+        int linha = tabela.getSelectedRow();
+
+        if (linha == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione um usuário para excluir.");
+            return;
+        }
+
+        int id = (int) model.getValueAt(linha, 0);
+        System.out.println("ID enviado ao DAO: " + id);
+
+        int confirm = JOptionPane.showConfirmDialog(
+                null,
+                "Tem certeza que deseja excluir o usuário ID " + id + "?",
+                "Confirmar Exclusão",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            dao.deletar(id);
+            model.removeRow(linha);
+        }
+    });
+
+    // --- ADICIONA OS BOTÕES AO PAINEL ---
     JPanel botoes = new JPanel();
     botoes.add(btAdd);
+    botoes.add(btExcluir);
 
     p.add(scroll, BorderLayout.CENTER);
     p.add(botoes, BorderLayout.SOUTH);
 
-    return p;   
-   }
+    return p;}
+
    
    
   private JPanel painelCategoriasAdmin() {

@@ -36,8 +36,14 @@ public class LoginScreen extends JPanel {
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         title.setFont(new Font("SansSerif", Font.BOLD, 28));
         title.setForeground(new Color(40, 40, 60));
-
+        
+        JLabel labelEmail = new JLabel("Email");
+        labelEmail.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelEmail.setMaximumSize(labelEmail.getPreferredSize());
         JTextField userField = styledField("Email");
+        JLabel labelSenha = new JLabel("Senha");
+        labelSenha.setMaximumSize(labelSenha.getPreferredSize());
+        labelSenha.setAlignmentX(Component.CENTER_ALIGNMENT);
         JPasswordField passField = styledPassword("Senha");
 
         JButton btnLogin = styledButton("Entrar");
@@ -89,8 +95,10 @@ public class LoginScreen extends JPanel {
         card.add(Box.createVerticalStrut(30));
         card.add(title);
         card.add(Box.createVerticalStrut(35));
+        card.add(labelEmail);
         card.add(userField);
         card.add(Box.createVerticalStrut(20));
+        card.add(labelSenha);
         card.add(passField);
         card.add(Box.createVerticalStrut(25));
         card.add(btnLogin);

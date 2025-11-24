@@ -89,14 +89,15 @@ public class UserDAO {
     
     
     public boolean deletar(int id) {
-    String sql = "DELETE FROM usuarios WHERE id_user = ?";
+    String sql = "DELETE FROM tb_user WHERE id_user = ?";
 
     try (Connection c = new ConnectionFactory().obtemConexao();
          PreparedStatement stmt = c.prepareStatement(sql)) {
 
         stmt.setInt(1, id);
-        stmt.executeUpdate();
-        return true;
+        int linhas = stmt.executeUpdate();
+        System.out.println("Rows deletadas: " + linhas);
+        return linhas > 0;
 
     } catch (Exception e) {
         System.out.println("Erro ao deletar usuário: " + e.getMessage());
