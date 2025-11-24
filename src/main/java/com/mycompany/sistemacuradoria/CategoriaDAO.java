@@ -95,6 +95,11 @@ public class CategoriaDAO {
     try {
         ConnectionFactory factory = new ConnectionFactory();
         Connection c = factory.obtemConexao();
+        
+        
+        System.out.println("Conexão obtida: " + c);
+        System.out.println("Tentando deletar id_categoria = " + idCategoria);
+
 
 
         if (c == null) {
@@ -103,7 +108,7 @@ public class CategoriaDAO {
         }
 
         PreparedStatement ps = c.prepareStatement(
-            "DELETE FROM categorias WHERE id_categoria = ?"
+            "DELETE FROM tb_categoria WHERE id_categoria = ?"
         );
 
         ps.setInt(1, idCategoria);

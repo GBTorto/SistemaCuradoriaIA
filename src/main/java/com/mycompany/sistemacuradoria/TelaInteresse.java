@@ -130,12 +130,12 @@ public class TelaInteresse extends javax.swing.JFrame {
             }
         });
 
-        jTextPane1.setBackground(new java.awt.Color(60, 63, 65));
+        jTextPane1.setBackground(new java.awt.Color(242, 242, 242));
         jTextPane1.setBorder(null);
         jTextPane1.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jTextPane1.setText("Selecione até 2 interesses:");
         jTextPane1.setToolTipText("");
-        jTextPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jTextPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(jTextPane1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -210,12 +210,10 @@ public class TelaInteresse extends javax.swing.JFrame {
     private void cancelarButtonInteresse1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarButtonInteresse1ActionPerformed
         // TODO add your handling code here:
         CategoriaDAO dao = new CategoriaDAO();
-        Cadastro cadastro = new Cadastro();
+        
         
         dao.cancelarInteresse(this.idUsuario);
         
-        cadastro.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_cancelarButtonInteresse1ActionPerformed
 
     /**

@@ -44,6 +44,14 @@ public class TelaAdmin extends JFrame {
         }
 
         JTable tabela = new JTable(model);
+        // Ativar ordenação
+        tabela.setAutoCreateRowSorter(true);
+
+        // Permitir mover colunas
+        tabela.getTableHeader().setReorderingAllowed(true);
+
+        // Permitir redimensionar colunas
+        tabela.getTableHeader().setResizingAllowed(true);
         JScrollPane scroll = new JScrollPane(tabela);
 
         JPanel botoes = new JPanel();
@@ -128,6 +136,14 @@ public class TelaAdmin extends JFrame {
         }
 
         JTable tabela = new JTable(model);
+        // Ativar ordenação
+        tabela.setAutoCreateRowSorter(true);
+
+        // Permitir mover colunas
+        tabela.getTableHeader().setReorderingAllowed(true);
+
+        // Permitir redimensionar colunas
+        tabela.getTableHeader().setResizingAllowed(true);
         JScrollPane scroll = new JScrollPane(tabela);
 
         JPanel botoes = new JPanel();

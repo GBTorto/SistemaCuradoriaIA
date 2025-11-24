@@ -388,7 +388,12 @@ private JPanel buildLogin() {
             int idGerado = dao.cadastrar(newUser);
             
             if (idGerado > 0) {
-                JOptionPane.showMessageDialog(p, "Usuário cadastrado com sucesso! ID: " + idGerado + ". Faça login.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                 // 👉 ABRIR A TELA DE INTERESSES
+                TelaInteresse ti = new TelaInteresse(idGerado);
+                ti.setVisible(true);
+                ti.setLocationRelativeTo(null);
+                
+//                JOptionPane.showMessageDialog(p, "Usuário cadastrado com sucesso! ID: " + idGerado + ". Faça login.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 cardLayout.show(mainContent, "login"); 
                 
                 user.setText(""); email.setText(""); idadeField.setText("");
@@ -742,7 +747,10 @@ private JScrollPane buildVerPosts() {
     }
 
     JTable tabela = new JTable(model);
-JScrollPane scroll = new JScrollPane(tabela);
+    
+    // permite escolher a forma de organização
+    tabela.setAutoCreateRowSorter(true);
+    JScrollPane scroll = new JScrollPane(tabela);
 
     // --- BOTÃO DE ADICIONAR ---
     JButton btAdd = new JButton("Adicionar Usuário");
@@ -847,6 +855,10 @@ JScrollPane scroll = new JScrollPane(tabela);
     }
 
     JTable tabela = new JTable(model);
+    
+    // permite organizar da forma que quiser a tabela
+    tabela.setAutoCreateRowSorter(true);
+    
     JScrollPane scroll = new JScrollPane(tabela);
 
     // Botão Adicionar
@@ -872,6 +884,7 @@ JScrollPane scroll = new JScrollPane(tabela);
         }
 
         int id = (int) tabela.getValueAt(linha, 0);
+        System.out.println("ID selecionado na JTable = " + id);
 
         int resp = JOptionPane.showConfirmDialog(
                 null,
