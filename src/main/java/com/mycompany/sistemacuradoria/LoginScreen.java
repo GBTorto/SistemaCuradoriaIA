@@ -45,6 +45,23 @@ public class LoginScreen extends JPanel {
         btnLogin.addActionListener(e -> {
             String email = userField.getText().trim();
             String senha = new String(passField.getPassword());
+            
+              // ============================================
+    // LOGIN DO ADMIN (fixo: admin / admin)
+    // ============================================
+            if (email.equals("admin") && senha.equals("admin")) {
+            User admin = new User();
+            admin.setId_user(0);
+            admin.setNome("Administrador");
+            admin.setEmail("admin");
+            admin.setTipo("Admin");
+
+            JOptionPane.showMessageDialog(this,
+            "Login de Administrador efetuado!");
+
+            onLoginSuccess.accept(admin);
+            return; // impede continuar para o login normal
+            }
 
             try {
                 UserDAO dao = new UserDAO();

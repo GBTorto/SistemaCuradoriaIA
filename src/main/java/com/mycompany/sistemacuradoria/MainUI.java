@@ -5,6 +5,8 @@ import com.mycompany.sistemacuradoria.User;
 import com.mycompany.sistemacuradoria.UserDAO;
 import com.mycompany.sistemacuradoria.Post;
 import com.mycompany.sistemacuradoria.PostDAO;
+import javax.swing.table.DefaultTableModel;
+
 
 import javax.swing.JOptionPane;
 import javax.swing.*;
@@ -40,6 +42,9 @@ public class MainUI extends JFrame {
     private JButton btCadastro;
     private JButton btCriarPost; 
     private JButton btPosts;
+    private JButton btAdmin;
+    private JButton btLogout;
+
 
     public MainUI() {
         // --- Construtor ---
@@ -88,18 +93,10 @@ public class MainUI extends JFrame {
         title.setFont(new Font("Segoe UI", Font.BOLD, 26)); 
         title.setForeground(new Color(255, 255, 255)); 
         
-        JButton btPerfil = new JButton("👤 Perfil");
-        styleTopButton(btPerfil);
-        btPerfil.addActionListener(e -> {
-            updatePerfilInfo();
-            cardLayout.show(mainContent, "perfil");
-        });
-
         top.add(title, BorderLayout.WEST);
         
         JPanel pnlRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        pnlRight.setOpaque(false); 
-        pnlRight.add(btPerfil);
+        pnlRight.setOpaque(false);
         top.add(pnlRight, BorderLayout.EAST);
 
         return top;
@@ -145,6 +142,11 @@ public class MainUI extends JFrame {
         JButton btConfig = styledButton("⚙️ Configurações");
         
         JButton btPerfil = styledButton("👤 Meu Perfil");
+        
+        btAdmin = styledButton("🛠 Painel Admin");
+        btAdmin.setVisible(false);
+        btAdmin.addActionListener(e -> cardLayout.show(mainContent, "admin"));
+
 
     btPerfil.addActionListener(e -> {
     updatePerfilInfo();   // <- Esse método tem que existir
@@ -182,6 +184,7 @@ public class MainUI extends JFrame {
         side.add(btPosts);
         side.add(btPerfil);
         side.add(btConfig);
+        side.add(btAdmin);
         
         // ADICIONAR UM ESPAÇO FLEXÍVEL ABAIXO PARA EMPURRAR OS BOTÕES PARA O TOPO (mantendo-os grandes)
         //side.add(Box.createVerticalStrut(80));
@@ -218,25 +221,6 @@ public class MainUI extends JFrame {
         return b;
     }
 
-    // NOVO MÉTODO DE CONTROLE
-    /**
-     * Controla a visibilidade dos botões Login e Cadastro com base no status de login.
-     */
-    private void updateSidebarVisibility() {
-        boolean isLoggedIn = (currentUser != null);
-
-        // Se estiver logado (isLoggedIn = true), esconde os botões (!isLoggedIn = false)
-        btLogin.setVisible(!isLoggedIn);
-        btCadastro.setVisible(!isLoggedIn);
-
-        // Chama revalidate/repaint no painel pai, o que força o BoxLayout a recalcular o espaço.
-        SwingUtilities.invokeLater(() -> {
-            if (btLogin.getParent() != null) {
-                btLogin.getParent().revalidate();
-                btLogin.getParent().repaint();
-            }
-        });
-    }
 
     // =========================================================================
     // ======== ÁREA PRINCIPAL COM TODAS AS TELAS ========
@@ -257,6 +241,8 @@ public class MainUI extends JFrame {
     mainContent.add(buildVerPosts(), "verposts");
     mainContent.add(buildPerfil(), "perfil");
     mainContent.add(buildConfig(), "config");
+    mainContent.add(buildAdminPanel(), "admin");
+
 
     return mainContent;
 }
@@ -279,20 +265,45 @@ public class MainUI extends JFrame {
 
 
     // === LOGIN (Lógica de Visibilidade Integrada) ===
-  private JPanel buildLogin() {
+  // === LOGIN (Lógica de Visibilidade Integrada) ===
+private JPanel buildLogin() {
     LoginScreen login = new LoginScreen(user -> {
-        // Quando o login der certo, atualizamos o currentUser
+
+        // guarda o user logado para uso em outras telas
         this.currentUser = user;
 
-        // Atualiza infos do perfil
+        // segurança: normaliza valores nulos
+        String tipo = (user.getTipo() == null) ? "" : user.getTipo().toLowerCase();
+        String email = (user.getEmail() == null) ? "" : user.getEmail().toLowerCase();
+        String senha = (user.getSenha() == null) ? "" : user.getSenha();
+
+        // condição admin: aceita "admin", "Administrador", "Admin" — flexível
+        boolean isAdmin = tipo.contains("admin") || email.equals("admin") || "admin".equals(senha);
+
+        if (isAdmin) {
+            // mostra o botão admin na sidebar (se existir)
+            if (btAdmin != null) {
+                btAdmin.setVisible(true);
+            }
+
+            // abre a janela independente do CardLayout (TelaAdmin é um JFrame)
+           cardLayout.show(mainContent, "admin");
+
+            // atualiza perfil / sidebar (opcional)
+            updatePerfilInfo();
+            updateSidebarVisibility();
+
+            // mostra uma confirmação
+            JOptionPane.showMessageDialog(this, "Bem-vindo, Administrador!");
+
+            // não entra na navegação para "home" — interrompe aqui
+            return;
+        }
+
+        // para usuários comuns, segue fluxo normal
         updatePerfilInfo();
-
-        // Atualiza sidebar (remove Login/Cadastro)
         updateSidebarVisibility();
-
-        // Vai para Home
         cardLayout.show(mainContent, "home");
-
         JOptionPane.showMessageDialog(this, "Login realizado com sucesso!");
     });
 
@@ -691,22 +702,232 @@ private JScrollPane buildVerPosts() {
     btLogout.setFocusPainted(false);
     btLogout.setCursor(new Cursor(Cursor.HAND_CURSOR));
     btLogout.setAlignmentX(Component.CENTER_ALIGNMENT);
+    btLogout.setEnabled(currentUser != null);
+    
+  btLogout.addActionListener(e -> {
 
-    btLogout.addActionListener(e -> {
-        currentUser = null;
-        updatePerfilInfo();
-        updateSidebarVisibility();
-        cardLayout.show(mainContent, "home");
-        JOptionPane.showMessageDialog(this, "Logout realizado!", "Sessão Encerrada", JOptionPane.INFORMATION_MESSAGE);
-    });
+    if (currentUser == null) {
+        JOptionPane.showMessageDialog(null,
+            "Você não está logado!",
+            "Erro",
+            JOptionPane.WARNING_MESSAGE
+        );
+        return;
+    }
+
+    // limpa sessão
+    currentUser = null;
+
+    // atualiza sidebar e perfil
+    updateSidebarVisibility();
+    updatePerfilInfo();
+
+    // volta para o login
+    cardLayout.show(mainContent, "login");
+    mainContent.revalidate();
+    mainContent.repaint();
+
+
+    JOptionPane.showMessageDialog(null, "Logout realizado com sucesso!");
+});
+
+
 
     infoPanel.add(btLogout);
 
     p.add(infoPanel);
 
     return p;
+    
+    
+}
+   
+  
+   private JPanel painelUsuariosAdmin() {
+    JPanel p = new JPanel(new BorderLayout());
+
+    String[] colunas = {"ID", "Nome", "Idade", "Email", "Tipo"};
+    DefaultTableModel model = new DefaultTableModel(colunas, 0);
+
+    UserDAO dao = new UserDAO();
+    List<User> lista = dao.listaUsers();
+
+    for (User u : lista) {
+        model.addRow(new Object[]{
+                u.getId_user(),
+                u.getNome(),
+                u.getIdade(),
+                u.getEmail(),
+                u.getTipo()
+        });
+    }
+
+    JTable tabela = new JTable(model);
+    JScrollPane scroll = new JScrollPane(tabela);
+
+    JButton btAdd = new JButton("Adicionar Usuário");
+    btAdd.addActionListener(e -> {
+        JTextField nomeField = new JTextField();
+        JTextField idadeField = new JTextField();
+        JTextField emailField = new JTextField();
+        JTextField senhaField = new JTextField();
+
+        Object[] form = {
+                "Nome:", nomeField,
+                "Idade:", idadeField,
+                "Email:", emailField,
+                "Senha:", senhaField
+        };
+        
+        JButton btExcluir = new JButton("Excluir Usuário");
+        btExcluir.addActionListener(ev -> {
+        int linha = tabela.getSelectedRow();
+
+        if (linha == -1) {
+        JOptionPane.showMessageDialog(null, "Selecione um usuário para excluir.");
+        return;
+        }
+
+        int id = (int) model.getValueAt(linha, 0);
+
+        int confirm = JOptionPane.showConfirmDialog(
+            null,
+            "Tem certeza que deseja excluir o usuário ID " + id + "?",
+            "Confirmar Exclusão",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+        dao.deletar(id); // CHAMA O DAO
+        model.removeRow(linha); // REMOVE DA TABELA
+        }
+        });
+
+
+        int result = JOptionPane.showConfirmDialog(
+                null, form,
+                "Cadastrar Usuário",
+                JOptionPane.OK_CANCEL_OPTION
+        );
+
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                int idade = Integer.parseInt(idadeField.getText());
+
+                User novo = new User();
+                novo.setNome(nomeField.getText());
+                novo.setIdade(idade);
+                novo.setEmail(emailField.getText());
+                novo.setSenha(senhaField.getText());
+                novo.setTipo("Comum");
+
+                int idGerado = dao.cadastrar(novo);
+
+                model.addRow(new Object[]{
+                        idGerado,
+                        novo.getNome(),
+                        novo.getIdade(),
+                        novo.getEmail(),
+                        novo.getTipo()
+                });
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Dados inválidos!");
+            }
+        }
+    });
+
+    JPanel botoes = new JPanel();
+    botoes.add(btAdd);
+
+    p.add(scroll, BorderLayout.CENTER);
+    p.add(botoes, BorderLayout.SOUTH);
+
+    return p;   
+   }
+   
+   
+  private JPanel painelCategoriasAdmin() {
+    JPanel p = new JPanel(new BorderLayout());
+
+    String[] colunas = {"ID", "Categoria"};
+    DefaultTableModel model = new DefaultTableModel(colunas, 0);
+
+    CategoriaDAO dao = new CategoriaDAO();
+    List<Categoria> lista = dao.listarNomesCategorias();
+
+    for (Categoria c : lista) {
+        model.addRow(new Object[]{
+                c.getIdCategoria(),
+                c.getNomeCategoria()
+        });
+    }
+
+    JTable tabela = new JTable(model);
+    JScrollPane scroll = new JScrollPane(tabela);
+
+    // Botão Adicionar
+    JButton btAdd = new JButton("Adicionar Categoria");
+    btAdd.addActionListener(e -> {
+        String nome = JOptionPane.showInputDialog("Nome da nova categoria:");
+
+        if (nome != null && !nome.trim().isEmpty()) {
+            dao.inserirCategoria(nome);
+            model.addRow(new Object[]{"-", nome});
+        }
+    });
+
+    // Botão Excluir
+    JButton btExcluir = new JButton("Excluir Categoria");
+    btExcluir.addActionListener(ev -> {
+
+        int linha = tabela.getSelectedRow();
+
+        if (linha == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione uma categoria para excluir");
+            return;
+        }
+
+        int id = (int) tabela.getValueAt(linha, 0);
+
+        int resp = JOptionPane.showConfirmDialog(
+                null,
+                "Excluir a categoria selecionada?",
+                "Confirmação",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (resp == JOptionPane.YES_OPTION) {
+            dao.excluirCategoria(id);
+            model.removeRow(linha);
+        }
+    });
+
+    JPanel botoes = new JPanel();
+    botoes.add(btAdd);
+    botoes.add(btExcluir);
+
+    p.add(scroll, BorderLayout.CENTER);
+    p.add(botoes, BorderLayout.SOUTH);
+
+    return p;
 }
 
+
+
+   private JPanel buildAdminPanel() {
+     JPanel container = new JPanel(new BorderLayout());
+
+    // Criar abas (as mesmas da TelaAdmin)
+    JTabbedPane abas = new JTabbedPane();
+
+    abas.add("Usuários", painelUsuariosAdmin());
+    abas.add("Categorias", painelCategoriasAdmin());
+
+    container.add(abas, BorderLayout.CENTER);
+
+    return container;
+}
     
     // Método para atualizar as informações do perfil
     private void updatePerfilInfo() {
@@ -714,15 +935,42 @@ private JScrollPane buildVerPosts() {
             lblPerfilNome.setText("Nome: " + currentUser.getNome());
             lblPerfilEmail.setText("Email: " + currentUser.getEmail());
             lblPerfilTipo.setText("Tipo de Usuário: " + currentUser.getTipo());
+             if (btLogout != null) btLogout.setEnabled(true);
         } else {
             lblPerfilNome.setText("Nome: Não Logado");
             lblPerfilEmail.setText("Email: N/A");
             lblPerfilTipo.setText("Tipo de Usuário: Visitante");
+             if (btLogout != null) btLogout.setEnabled(false);
         }
     }
     
+     private void updateSidebarVisibility() {
+        boolean logged = (currentUser != null);
+
+        btLogin.setVisible(!logged);
+        btCadastro.setVisible(!logged);
+
+        btCriarPost.setVisible(logged);
+        //btMeu Perfil.setVisible(logged);
+        //btConfigurações.setVisible(logged);
+        
+         // Chama revalidate/repaint no painel pai, o que força o BoxLayout a recalcular o espaço.
+        SwingUtilities.invokeLater(() -> {
+            if (btLogin.getParent() != null) {
+                btLogin.getParent().revalidate();
+                btLogin.getParent().repaint();
+            }
+
+        if (currentUser == null) {
+            btAdmin.setVisible(false);
+        }
+        });
+    }
+
+    
+    
     // === CONFIGURAÇÕES (Mantido) ===
-    private JPanel buildConfig() {
+       private JPanel buildConfig() {
         JPanel p = new JPanel(new GridBagLayout()); 
         p.setOpaque(false); 
 
