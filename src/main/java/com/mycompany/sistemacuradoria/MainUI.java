@@ -7,14 +7,22 @@ import com.mycompany.sistemacuradoria.Post;
 import com.mycompany.sistemacuradoria.PostDAO;
 import javax.swing.table.DefaultTableModel;
 
-
+import javax.swing.table.TableRowSorter;
 import javax.swing.JOptionPane;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import javax.swing.table.TableModel;
+import java.util.Comparator;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.SwingConstants;
+            
 
 // -------------------------------------------------------------------
 
@@ -141,7 +149,6 @@ public class MainUI extends JFrame {
         btCriarPost = styledButton("✍️ Criar Post");
         btPosts = styledButton("📰 Ver Posts");
         btPostsFiltrados = styledButton("Posts Filtrados");
-        JButton btConfig = styledButton("⚙️ Configurações");
         
         JButton btPerfil = styledButton("👤 Meu Perfil");
         
@@ -177,10 +184,7 @@ public class MainUI extends JFrame {
             updatePostsFiltradosList();
             cardLayout.show(mainContent, "verpostsfiltrados");
         });
-        
-        btConfig.addActionListener(e -> cardLayout.show(mainContent, "config"));
-        
-        
+
         
         
         // Adicionando os componentes 
@@ -191,7 +195,6 @@ public class MainUI extends JFrame {
         side.add(btPosts);
         side.add(btPostsFiltrados);
         side.add(btPerfil);
-        side.add(btConfig);
         side.add(btAdmin);
         
         // ADICIONAR UM ESPAÇO FLEXÍVEL ABAIXO PARA EMPURRAR OS BOTÕES PARA O TOPO (mantendo-os grandes)
@@ -257,19 +260,83 @@ public class MainUI extends JFrame {
 
     
     private JPanel buildHome() {
-    JPanel h = new JPanel(new GridBagLayout()); 
-    h.setOpaque(false); 
+    JPanel home = new JPanel();
+    home.setOpaque(false);
+    home.setLayout(new BorderLayout());
 
-    JLabel welcome = new JLabel(
-        "👋 Bem-vindo(a) à Plataforma Curadoria! Selecione uma opção no menu.",
-        SwingConstants.CENTER
+    // ------------------------------
+    // TÍTULO SUPERIOR
+    // ------------------------------
+    JLabel titulo = new JLabel("👋 Bem-vindo(a) à Plataforma Curadoria!", SwingConstants.LEFT);
+    titulo.setFont(new Font("Segoe UI", Font.BOLD, 32));
+    titulo.setForeground(new Color(50, 50, 50));
+    titulo.setBorder(BorderFactory.createEmptyBorder(30, 40, 20, 40)); 
+    home.add(titulo, BorderLayout.NORTH);
+
+    // ------------------------------
+    // ÁREA CENTRAL COM GRIDBAG
+    // ------------------------------
+    JPanel centro = new JPanel(new GridBagLayout());
+    centro.setOpaque(false);
+    GridBagConstraints c = new GridBagConstraints();
+    c.insets = new Insets(10, 40, 10, 40); 
+    c.anchor = GridBagConstraints.NORTHWEST;
+    c.fill = GridBagConstraints.HORIZONTAL;
+    c.weightx = 1.0;
+
+    // ------------------------------
+    // TEXTO
+    // ------------------------------
+    JTextArea texto = new JTextArea(
+        "Aqui você encontra conteúdos, postagens e materiais sobre ética digital,\n"
+      + "cibersegurança, privacidade e inteligência artificial.\n\n"
+      + "Navegue pelas opções ao lado e aproveite a plataforma!"
+            
     );
-    welcome.setFont(new Font("Segoe UI", Font.PLAIN, 24));
-    welcome.setForeground(new Color(50, 50, 50));
+    texto.setFont(new Font("Segoe UI", Font.PLAIN, 36));
+    texto.setEditable(false);
+    texto.setOpaque(false);
+    texto.setForeground(new Color(40, 40, 40));
+    texto.setLineWrap(true);
+    texto.setWrapStyleWord(true);
+    texto.setBorder(BorderFactory.createEmptyBorder(10, 10, 400, 200));
 
-    h.add(welcome);
-    return h;
+    c.gridx = 0;
+    c.gridy = 0;
+    centro.add(texto, c);
+
+    // ------------------------------
+    // BOTÃO DE VÍDEO
+    // ------------------------------
+    JButton btVideo = new JButton("▶ Assistir Vídeo de Apresentação");
+    btVideo.setFont(new Font("Segoe UI", Font.BOLD, 20));
+    btVideo.setBackground(new Color(0, 150, 255));
+    btVideo.setForeground(Color.WHITE);
+    btVideo.setFocusPainted(false);
+    btVideo.setPreferredSize(new Dimension(350, 50)); // <<< tamanho retangular
+    btVideo.setMaximumSize(new Dimension(350, 50));
+
+    btVideo.addActionListener(e -> abrirVideo());
+
+    c.gridx = 0;
+    c.gridy = 1;
+    c.insets = new Insets(30, 40, 100, 40);
+    centro.add(btVideo, c);
+
+    home.add(centro, BorderLayout.CENTER);
+
+    return home;
 }
+
+
+    private void abrirVideo() {
+    try {
+        File video = new File("C:\\Users\\mathe\\Downloads\\WhatsApp Video 2025-11-25 at 01.00.21.mp4");
+        Desktop.getDesktop().open(video);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao abrir o vídeo: " + e.getMessage());
+    }
+    }
 
 
     // === LOGIN (Lógica de Visibilidade Integrada) ===
@@ -350,6 +417,27 @@ private JPanel buildCadastro() {
     
     JLabel l4 = smallLabel("Idade:"); l4.setAlignmentX(Component.CENTER_ALIGNMENT);
     JTextField idadeField = field(); idadeField.setMaximumSize(new Dimension(100, 35));
+    
+    idadeField.setMaximumSize(new Dimension(100, 35));
+
+    // 🔥 BLOQUEIA LETRAS E QUALQUER COISA QUE NÃO SEJA NÚMERO
+    ((AbstractDocument) idadeField.getDocument()).setDocumentFilter(new DocumentFilter() {
+        @Override
+        public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr)
+                throws BadLocationException {
+            if (string.matches("\\d+")) { 
+                super.insertString(fb, offset, string, attr);
+            }
+        }
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                throws BadLocationException {
+            if (text.matches("\\d*")) { 
+                super.replace(fb, offset, length, text, attrs);
+            }
+        }
+    });
     
     JButton cadastrar = bigButton("Cadastrar"); 
     cadastrar.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -438,121 +526,123 @@ private JPanel buildCadastro() {
 
 
     // === CRIAR POST (Centralizado) ===
-    // === CRIAR POST (Centralizado) ===
+ 
     private JPanel buildCriarPost() {
-        JPanel p = new JPanel(new GridBagLayout());
-        p.setOpaque(false);
+    JPanel p = new JPanel(new GridBagLayout());
+    p.setOpaque(false); 
 
-        JPanel formPanel = new GradientPanel(new Color(255, 255, 255), new Color(240, 240, 240));
-        formPanel.setPreferredSize(new Dimension(700, 600));
-        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
-            BorderFactory.createEmptyBorder(30, 50, 30, 50)
-        ));
+    JPanel formPanel = new GradientPanel(new Color(255, 255, 255), new Color(240, 240, 240));
+    formPanel.setPreferredSize(new Dimension(700, 600)); 
+    formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+    formPanel.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+        BorderFactory.createEmptyBorder(30, 50, 30, 50)
+    ));
 
-        JLabel t = titleLabel("✍️ Criar Novo Post");
-        t.setAlignmentX(Component.CENTER_ALIGNMENT);
+    JLabel t = titleLabel("✍️ Criar Novo Post");
+    t.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel l1 = smallLabel("Título:"); l1.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JTextField titulo = field(); titulo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
+    JLabel l1 = smallLabel("Título:"); 
+    l1.setAlignmentX(Component.LEFT_ALIGNMENT);
+    JTextField titulo = field(); 
+    titulo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
 
-        JLabel l_cat = smallLabel("Categoria:"); l_cat.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JComboBox<Categoria> comboCategoria = new JComboBox<>();
-        comboCategoria.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
+    JLabel l_cat = smallLabel("Categoria:"); 
+    l_cat.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // 🎯 Lógica Real: Carregar Categorias do Banco
-        try {
-            CategoriaDAO catDao = new CategoriaDAO();
-            // Assumindo que o método se chama buscarTodas() ou listarNomesCategorias()
-            List<Categoria> categorias = catDao.buscarTodas(); 
-            
-            comboCategoria.removeAllItems();
-            for (Categoria cat : categorias) {
-                comboCategoria.addItem(cat);
-            }
-            
-            // Adicionar a opção "Selecione" (Valor 0)
-            comboCategoria.addItem(new Categoria(0, "Selecione uma categoria")); 
-            comboCategoria.setSelectedIndex(comboCategoria.getItemCount() - 1); 
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao carregar categorias: " + e.getMessage());
-            comboCategoria.addItem(new Categoria(0, "Erro ao carregar"));
+    // 🔥 Aqui está seu combo REAL, sem duplicação
+    JComboBox<Categoria> comboCategoria = new JComboBox<>();
+    comboCategoria.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
+    comboCategoriaDoCriarPost = comboCategoria; // guarda para atualizar depois
+
+    // 🔥 Carregar categorias do banco
+    atualizarCategorias(comboCategoria);
+
+    JLabel l2 = smallLabel("Conteúdo:"); 
+    l2.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+    JTextArea texto = new JTextArea();
+    texto.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+    texto.setWrapStyleWord(true);
+    texto.setLineWrap(true);
+    JScrollPane sp = new JScrollPane(texto);
+    sp.setPreferredSize(new Dimension(600, 250)); 
+
+    JButton postar = bigButton("Publicar"); 
+    postar.setAlignmentX(Component.CENTER_ALIGNMENT);
+    postar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45)); 
+
+    // LÓGICA DE POSTAGEM 
+    postar.addActionListener(e -> {
+        String tituloStr = titulo.getText().trim();
+        String textoStr = texto.getText().trim();
+        Categoria categoriaSelecionada = (Categoria) comboCategoria.getSelectedItem();
+        
+        if (currentUser == null) {
+            JOptionPane.showMessageDialog(p, "Você precisa estar logado para publicar!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (tituloStr.isEmpty() || textoStr.isEmpty() || categoriaSelecionada == null || categoriaSelecionada.getIdCategoria() == 0) {
+            JOptionPane.showMessageDialog(p, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
+        Post novoPost = new Post();
+        novoPost.setTitulo(tituloStr);
+        novoPost.setConteudo(textoStr);
+        novoPost.setAutor(currentUser.getNome());
+        novoPost.setIdCategoria(categoriaSelecionada.getIdCategoria());
+        novoPost.setIdUser(currentUser.getId_user());
+        novoPost.setNomeCategoria(categoriaSelecionada.toString());
+        
+         PostDAO postDao = new PostDAO();
+        boolean sucesso = postDao.salvarPost(novoPost);
 
-        JLabel l2 = smallLabel("Conteúdo:"); l2.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JTextArea texto = new JTextArea();
-        texto.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-        texto.setWrapStyleWord(true);
-        texto.setLineWrap(true);
-        JScrollPane sp = new JScrollPane(texto);
-        sp.setPreferredSize(new Dimension(600, 250));
+        posts.add(novoPost); 
+        updatePostsList();
 
-        JButton postar = bigButton("Publicar");
-        postar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        postar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
+        JOptionPane.showMessageDialog(p, "Post publicado (Simulado).", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
-        // 🎯 Lógica Real: Persistência do Post
-        postar.addActionListener(e -> {
-            String tituloStr = titulo.getText().trim();
-            String textoStr = texto.getText().trim();
-            Object selectedItem = comboCategoria.getSelectedItem();
-            Categoria categoriaSelecionada = (selectedItem instanceof Categoria) ? (Categoria) selectedItem : null;
+        titulo.setText(""); 
+        texto.setText("");
+        comboCategoria.setSelectedIndex(comboCategoria.getItemCount() - 1);
+    });
 
-            if (currentUser == null) {
-                JOptionPane.showMessageDialog(p, "Você precisa estar logado para publicar!", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (tituloStr.isEmpty() || textoStr.isEmpty() || categoriaSelecionada == null || categoriaSelecionada.getIdCategoria() == 0) {
-                JOptionPane.showMessageDialog(p, "Preencha o título, conteúdo e selecione uma categoria válida!", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+    formPanel.add(t);
+    formPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+    formPanel.add(l1); 
+    formPanel.add(titulo);
+    formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+    formPanel.add(l_cat); 
+    formPanel.add(comboCategoria);
+    formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+    formPanel.add(l2); 
+    formPanel.add(sp);
+    formPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+    formPanel.add(postar);
 
-            Post novoPost = new Post();
-            novoPost.setTitulo(tituloStr);
-            novoPost.setConteudo(textoStr);
-            novoPost.setAutor(currentUser.getNome());
-            novoPost.setIdCategoria(categoriaSelecionada.getIdCategoria());
-            novoPost.setIdUser(currentUser.getId_user());
-            novoPost.setNomeCategoria(categoriaSelecionada.toString()); // Guarda o nome para exibição
+    p.add(formPanel);
 
-            PostDAO postDao = new PostDAO();
-            boolean sucesso = postDao.salvarPost(novoPost); // ⭐️ CHAMA A PERSISTÊNCIA REAL ⭐️
+    return p;
+}
 
-            if (sucesso) {
-                // posts.add(novoPost); // ❌ Removida a simulação
-                JOptionPane.showMessageDialog(p, "Post publicado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                
-                // Limpar campos
-                titulo.setText(""); 
-                texto.setText("");
-                comboCategoria.setSelectedIndex(comboCategoria.getItemCount() - 1);
-                
-                // Opcional: Atualizar a lista de posts na tela principal
-                updatePostsList(); 
-                
-            } else {
-                JOptionPane.showMessageDialog(p, "Falha ao publicar o Post. Verifique a conexão e o log.", "Erro de Banco de Dados", JOptionPane.ERROR_MESSAGE);
-            }
+    private JComboBox<Categoria> comboCategoriaDoCriarPost;
 
-        });
 
-        formPanel.add(t);
-        formPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        formPanel.add(l1); formPanel.add(titulo);
-        formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        formPanel.add(l_cat); formPanel.add(comboCategoria);
-        formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        formPanel.add(l2); formPanel.add(sp);
-        formPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        formPanel.add(postar);
+    private void atualizarCategorias(JComboBox<Categoria> combo) {
+    combo.removeAllItems();
 
-        p.add(formPanel);
+    CategoriaDAO dao = new CategoriaDAO();
+    List<Categoria> categorias = dao.buscarTodas();
 
-        return p;
+    for (Categoria c : categorias) {
+        combo.addItem(c);
     }
+
+    combo.addItem(new Categoria(0, "Selecione uma categoria"));
+    combo.setSelectedIndex(combo.getItemCount() - 1);
+}
+
 
 // === VER POSTS (Melhorado) ===
 
@@ -574,6 +664,7 @@ private JScrollPane buildVerPosts() {
 
     private void updatePostsList() {
         PostDAO postDao = new PostDAO();
+         posts = postDao.listarTodosPosts();
         posts = new ArrayList<>(); // Inicializa para evitar NullPointerException
 
         // ⭐️ Descomentar as chamadas reais ⭐️
@@ -815,8 +906,19 @@ private JScrollPane buildVerPosts() {
     JPanel p = new JPanel(new BorderLayout());
 
     String[] colunas = {"ID", "Nome", "Idade", "Email", "Tipo"};
-    DefaultTableModel model = new DefaultTableModel(colunas, 0);
+     DefaultTableModel model = new DefaultTableModel(colunas, 0) {
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            if (columnIndex == 0) return Integer.class; // ID numérico
+            return String.class; // resto normal
+        }
 
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; // tabela somente leitura
+        }
+    };
+     
     UserDAO dao = new UserDAO();
     List<User> lista = dao.listaUsers();
 
@@ -831,6 +933,15 @@ private JScrollPane buildVerPosts() {
     }
 
     JTable tabela = new JTable(model);
+    // FORÇA A COLUNA 0 A SER ORDENADA COMO INTEGER
+    tabela.setAutoCreateRowSorter(true);
+    DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
+    leftRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+    tabela.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
+    TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
+    sorter.setComparator(0, Comparator.comparingInt(a -> (int) a));
+    tabela.setRowSorter(sorter);
+
     
     // permite escolher a forma de organização
     tabela.setAutoCreateRowSorter(true);
@@ -841,12 +952,30 @@ private JScrollPane buildVerPosts() {
     btAdd.addActionListener(e -> {
         JTextField nomeField = new JTextField();
         JTextField idadeField = new JTextField();
+        // 🔥 BLOQUEIA LETRAS — SOMENTE NÚMEROS EM idadeField
+((AbstractDocument) idadeField.getDocument()).setDocumentFilter(new DocumentFilter() {
+    @Override
+    public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr)
+            throws BadLocationException {
+        if (string.matches("\\d+")) {
+            super.insertString(fb, offset, string, attr);
+        }
+    }
+
+    @Override
+    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+            throws BadLocationException {
+        if (text.matches("\\d*")) {
+            super.replace(fb, offset, length, text, attrs);
+        }
+    }
+});
         JTextField emailField = new JTextField();
         JTextField senhaField = new JTextField();
 
         Object[] form = {
                 "Nome:", nomeField,
-                "Idade:", idadeField,
+                "Idade:", idadeField, 
                 "Email:", emailField,
                 "Senha:", senhaField
         };
@@ -926,7 +1055,19 @@ private JScrollPane buildVerPosts() {
     JPanel p = new JPanel(new BorderLayout());
 
     String[] colunas = {"ID", "Categoria"};
-    DefaultTableModel model = new DefaultTableModel(colunas, 0);
+   // MODELO CORRETO COM getColumnClass()
+    DefaultTableModel model = new DefaultTableModel(colunas, 0) {
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            if (columnIndex == 0) return Integer.class; // ID numérico
+            return String.class; // resto normal
+        }
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; // tabela somente leitura
+        }
+    };
 
     CategoriaDAO dao = new CategoriaDAO();
     List<Categoria> lista = dao.listarNomesCategorias();

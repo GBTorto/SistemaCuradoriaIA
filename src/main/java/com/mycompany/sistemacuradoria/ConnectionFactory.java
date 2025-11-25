@@ -8,7 +8,7 @@ public class ConnectionFactory {
     private final String url =
     "jdbc:mysql://localhost:3306/db_curadoria_ia?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     private final String user = "root";
-    private final String password = "anima123";
+    private final String password = "@Meliodas01";
 
     public Connection obtemConexao() {
         try {
