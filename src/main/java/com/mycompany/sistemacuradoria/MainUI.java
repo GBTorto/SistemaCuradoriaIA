@@ -42,6 +42,7 @@ public class MainUI extends JFrame {
     private JButton btCadastro;
     private JButton btCriarPost; 
     private JButton btPosts;
+    private JButton btPostsFiltrados;
     private JButton btAdmin;
     private JButton btLogout;
 
@@ -139,6 +140,7 @@ public class MainUI extends JFrame {
         
         btCriarPost = styledButton("✍️ Criar Post");
         btPosts = styledButton("📰 Ver Posts");
+        btPostsFiltrados = styledButton("Posts Filtrados");
         JButton btConfig = styledButton("⚙️ Configurações");
         
         JButton btPerfil = styledButton("👤 Meu Perfil");
@@ -171,6 +173,11 @@ public class MainUI extends JFrame {
             cardLayout.show(mainContent, "verposts");
         });
         
+        btPostsFiltrados.addActionListener(e -> {
+            updatePostsFiltradosList();
+            cardLayout.show(mainContent, "verpostsfiltrados");
+        });
+        
         btConfig.addActionListener(e -> cardLayout.show(mainContent, "config"));
         
         
@@ -182,6 +189,7 @@ public class MainUI extends JFrame {
         side.add(btCadastro);
         side.add(btCriarPost);
         side.add(btPosts);
+        side.add(btPostsFiltrados);
         side.add(btPerfil);
         side.add(btConfig);
         side.add(btAdmin);
@@ -312,7 +320,7 @@ private JPanel buildLogin() {
 
 
     // === CADASTRO (Lógica de Visibilidade Integrada) ===
-    private JPanel buildCadastro() {
+private JPanel buildCadastro() {
     JPanel p = new JPanel(new GridBagLayout());
     p.setOpaque(false); 
     
@@ -430,12 +438,13 @@ private JPanel buildLogin() {
 
 
     // === CRIAR POST (Centralizado) ===
+    // === CRIAR POST (Centralizado) ===
     private JPanel buildCriarPost() {
         JPanel p = new JPanel(new GridBagLayout());
-        p.setOpaque(false); 
+        p.setOpaque(false);
 
         JPanel formPanel = new GradientPanel(new Color(255, 255, 255), new Color(240, 240, 240));
-        formPanel.setPreferredSize(new Dimension(700, 600)); 
+        formPanel.setPreferredSize(new Dimension(700, 600));
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
@@ -451,74 +460,83 @@ private JPanel buildLogin() {
         JLabel l_cat = smallLabel("Categoria:"); l_cat.setAlignmentX(Component.CENTER_ALIGNMENT);
         JComboBox<Categoria> comboCategoria = new JComboBox<>();
         comboCategoria.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
-        
+
+        // 🎯 Lógica Real: Carregar Categorias do Banco
         try {
-            // Supondo que CategoriaDAO, Categoria, PostDAO existem no seu projeto
-            // CategoriaDAO catDao = new CategoriaDAO();
-            // List<Categoria> categorias = catDao.buscarTodas(); 
-            // for (Categoria cat : categorias) {
-            //     comboCategoria.addItem(cat);
-            // }
-            // Simulando categorias
-            comboCategoria.addItem(new Categoria(1, "IA Responsável"));
-            comboCategoria.addItem(new Categoria(2, "Cibersegurança"));
-            comboCategoria.addItem(new Categoria(3, "Privacidade & Ética Digital"));
+            CategoriaDAO catDao = new CategoriaDAO();
+            // Assumindo que o método se chama buscarTodas() ou listarNomesCategorias()
+            List<Categoria> categorias = catDao.buscarTodas(); 
             
-            comboCategoria.addItem(new Categoria(0, "Selecione uma categoria"));
-            comboCategoria.setSelectedIndex(comboCategoria.getItemCount() - 1);
+            comboCategoria.removeAllItems();
+            for (Categoria cat : categorias) {
+                comboCategoria.addItem(cat);
+            }
+            
+            // Adicionar a opção "Selecione" (Valor 0)
+            comboCategoria.addItem(new Categoria(0, "Selecione uma categoria")); 
+            comboCategoria.setSelectedIndex(comboCategoria.getItemCount() - 1); 
             
         } catch (Exception e) {
             System.err.println("Erro ao carregar categorias: " + e.getMessage());
             comboCategoria.addItem(new Categoria(0, "Erro ao carregar"));
         }
-        
-        
+
+
         JLabel l2 = smallLabel("Conteúdo:"); l2.setAlignmentX(Component.CENTER_ALIGNMENT);
         JTextArea texto = new JTextArea();
         texto.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         texto.setWrapStyleWord(true);
         texto.setLineWrap(true);
         JScrollPane sp = new JScrollPane(texto);
-        sp.setPreferredSize(new Dimension(600, 250)); 
+        sp.setPreferredSize(new Dimension(600, 250));
 
-        JButton postar = bigButton("Publicar"); 
+        JButton postar = bigButton("Publicar");
         postar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        postar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45)); 
+        postar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
 
-        // LÓGICA DE POSTAGEM 
+        // 🎯 Lógica Real: Persistência do Post
         postar.addActionListener(e -> {
             String tituloStr = titulo.getText().trim();
             String textoStr = texto.getText().trim();
             Object selectedItem = comboCategoria.getSelectedItem();
             Categoria categoriaSelecionada = (selectedItem instanceof Categoria) ? (Categoria) selectedItem : null;
-            
+
             if (currentUser == null) {
                 JOptionPane.showMessageDialog(p, "Você precisa estar logado para publicar!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (tituloStr.isEmpty() || textoStr.isEmpty() || categoriaSelecionada == null || categoriaSelecionada.getIdCategoria() == 0) {
-                 JOptionPane.showMessageDialog(p, "Preencha o título, conteúdo e selecione uma categoria válida!", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(p, "Preencha o título, conteúdo e selecione uma categoria válida!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             Post novoPost = new Post();
             novoPost.setTitulo(tituloStr);
             novoPost.setConteudo(textoStr);
             novoPost.setAutor(currentUser.getNome());
             novoPost.setIdCategoria(categoriaSelecionada.getIdCategoria());
             novoPost.setIdUser(currentUser.getId_user());
-            // Simulação do nome da categoria (assumindo que Post tem setNomeCategoria)
-            novoPost.setNomeCategoria(categoriaSelecionada.toString()); 
-            
-            // PostDAO postDao = new PostDAO();
-            // boolean sucesso = postDao.salvarPost(novoPost);
-            
-            posts.add(novoPost); 
-            
-            JOptionPane.showMessageDialog(p, "Post publicado (Simulado).", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            titulo.setText(""); texto.setText("");
-            comboCategoria.setSelectedIndex(comboCategoria.getItemCount() - 1);
-            
+            novoPost.setNomeCategoria(categoriaSelecionada.toString()); // Guarda o nome para exibição
+
+            PostDAO postDao = new PostDAO();
+            boolean sucesso = postDao.salvarPost(novoPost); // ⭐️ CHAMA A PERSISTÊNCIA REAL ⭐️
+
+            if (sucesso) {
+                // posts.add(novoPost); // ❌ Removida a simulação
+                JOptionPane.showMessageDialog(p, "Post publicado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                
+                // Limpar campos
+                titulo.setText(""); 
+                texto.setText("");
+                comboCategoria.setSelectedIndex(comboCategoria.getItemCount() - 1);
+                
+                // Opcional: Atualizar a lista de posts na tela principal
+                updatePostsList(); 
+                
+            } else {
+                JOptionPane.showMessageDialog(p, "Falha ao publicar o Post. Verifique a conexão e o log.", "Erro de Banco de Dados", JOptionPane.ERROR_MESSAGE);
+            }
+
         });
 
         formPanel.add(t);
@@ -556,15 +574,81 @@ private JScrollPane buildVerPosts() {
 
     private void updatePostsList() {
         PostDAO postDao = new PostDAO();
-        // A linha abaixo usa listagem simulada ou real, dependendo da sua implementação.
-        if (currentUser != null) {
-              // posts = postDao.listarPost(currentUser.getId_user()); // Descomentar se tiver a função
+        posts = new ArrayList<>(); // Inicializa para evitar NullPointerException
+
+        // ⭐️ Descomentar as chamadas reais ⭐️
+        if (currentUser != null && currentUser.getId_user() > 0) {
+              posts = postDao.listarTodosPosts(); 
         } else {
-              // posts = postDao.listarTodosPosts(); // Descomentar se tiver a função
+              posts = postDao.listarTodosPosts(); 
         }
         
         postsPanel.removeAll();
-        postsPanel.add(titleLabel("📰 Posts Recentes"));
+        JLabel titleTela = titleLabel("📰 Posts Recentes");
+        titleTela.setAlignmentX(Component.CENTER_ALIGNMENT);
+        postsPanel.add(titleTela);
+        postsPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        if (posts.isEmpty()) {
+              postsPanel.add(new JLabel("Nenhum post encontrado."));
+        } else {
+              for (Post p : posts) { 
+                  JPanel card = new JPanel();
+                  card.setLayout(new BorderLayout());
+                  card.setBackground(Color.WHITE); 
+                  card.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+                    BorderFactory.createEmptyBorder(20, 20, 20, 20)
+                  ));
+                  card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
+    
+                  // Assumindo que Post tem getNomeCategoria()
+                  JLabel title = new JLabel("✨ " + p.getTitulo() + " (Categoria: " + p.getNomeCategoria() + ")"); 
+                  title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+                  title.setForeground(new Color(0, 150, 255));
+    
+                  JTextArea conteudo = new JTextArea(p.getConteudo()); 
+                  conteudo.setWrapStyleWord(true);
+                  conteudo.setLineWrap(true);
+                  conteudo.setEditable(false);
+                  conteudo.setOpaque(false);
+                  conteudo.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+    
+                  JLabel autor = new JLabel("Autor: " + p.getAutor(), SwingConstants.RIGHT); 
+                  autor.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+                  autor.setForeground(new Color(100, 100, 100));
+
+                  card.add(title, BorderLayout.NORTH);
+                  card.add(conteudo, BorderLayout.CENTER);
+                  card.add(autor, BorderLayout.SOUTH);
+    
+                  postsPanel.add(card);
+                  postsPanel.add(Box.createRigidArea(new Dimension(0, 25)));
+               }
+        }
+        
+        postsPanel.revalidate();
+        postsPanel.repaint();
+    }
+    
+    private void updatePostsFiltradosList() {
+        PostDAO postDao = new PostDAO();
+        posts = new ArrayList<>();
+
+        if (currentUser != null && currentUser.getId_user() > 0) {
+            // ⭐️ CORREÇÃO: Passar apenas o ID ⭐️
+            int idDoUsuario = currentUser.getId_user(); 
+            posts = postDao.listarPost(idDoUsuario); 
+        } else {
+            // ❌ Note: Se listarPost() não recebe parâmetros, ele deve listar TUDO.
+            // Se a sua intenção é listar TUDO (sem filtro) quando não há login, use listarTodosPosts()
+            posts = postDao.listarTodosPosts(); 
+        }
+        
+        postsPanel.removeAll();
+        JLabel titleTela = titleLabel("📰 Posts Filtrados");
+        titleTela.setAlignmentX(Component.CENTER_ALIGNMENT);
+        postsPanel.add(titleTela);
         postsPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
         if (posts.isEmpty()) {

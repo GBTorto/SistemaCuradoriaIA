@@ -8,6 +8,32 @@ import java.util.List;
 
 
 public class PostDAO {
+    public boolean salvarPost(Post post) {
+        // SQL para inserção na tabela tb_post
+        // Certifique-se de que os nomes das colunas (titulo, conteudo, etc.) estão corretos
+        String sql = "INSERT INTO tb_post (titulo, conteudo, id_categoria, id_user, autor) VALUES (?, ?, ?, ?, ?)";
+        ConnectionFactory factory = new ConnectionFactory(); // Assumindo que você tem ConnectionFactory
+        
+        try (Connection c = factory.obtemConexao();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            
+            ps.setString(1, post.getTitulo());
+            ps.setString(2, post.getConteudo());
+            ps.setInt(3, post.getIdCategoria());
+            ps.setInt(4, post.getIdUser());
+            ps.setString(5, post.getAutor()); // Assumindo que o objeto Post tem getAutor()
+            
+            int linhasAfetadas = ps.executeUpdate();
+            
+            return linhasAfetadas > 0;
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao salvar Post no banco de dados: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    } 
+    
     public List<Post> listarPost(int idUser){
         List<Post> posts = new ArrayList<>();
         
