@@ -1031,6 +1031,7 @@ private JScrollPane buildVerPosts() {
         btCadastro.setVisible(!logged);
 
         btCriarPost.setVisible(logged);
+        btPostsFiltrados.setVisible(logged);
         //btMeu Perfil.setVisible(logged);
         //btConfigurações.setVisible(logged);
         
